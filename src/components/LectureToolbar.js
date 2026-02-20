@@ -72,10 +72,10 @@ export default function LectureToolbar({ slug, title }) {
 
       // Title header
       const header = document.createElement('div');
-      header.style.cssText = 'text-align:center;margin-bottom:24px;padding-bottom:16px;border-bottom:2px solid #c26363;';
+      header.style.cssText = 'text-align:center;margin-bottom:24px;padding-bottom:16px;border-bottom:2px solid #1976D2;';
       const h1 = document.createElement('h1');
       h1.textContent = title;
-      h1.style.cssText = 'font-size:20px;color:#c26363;margin:0 0 4px;';
+      h1.style.cssText = 'font-size:20px;color:#1565C0;margin:0 0 4px;';
       header.appendChild(h1);
       const subtitle = document.createElement('p');
       subtitle.textContent = 'ألف باء الزواج';
@@ -104,8 +104,8 @@ export default function LectureToolbar({ slug, title }) {
         el.style.textAlign = 'right';
       });
       contentClone.querySelectorAll('h1').forEach(el => {
-        el.style.color = '#a04e4e';
-        el.style.borderBottomColor = '#f0d4d4';
+        el.style.color = '#1565C0';
+        el.style.borderBottomColor = '#BBDEFB';
       });
       contentClone.querySelectorAll('h2').forEach(el => {
         el.style.color = '#212121';
@@ -126,10 +126,10 @@ export default function LectureToolbar({ slug, title }) {
         el.style.color = '#212121';
       });
       contentClone.querySelectorAll('a').forEach(el => {
-        el.style.color = '#c26363';
+        el.style.color = '#1976D2';
       });
       contentClone.querySelectorAll('blockquote').forEach(el => {
-        el.style.borderRightColor = '#c26363';
+        el.style.borderRightColor = '#1976D2';
         el.style.color = '#333';
         el.style.background = '#F5F5F5';
       });
@@ -202,9 +202,9 @@ export default function LectureToolbar({ slug, title }) {
       // General note at the end
       if (includeComments && generalNote && generalNote.note?.trim()) {
         const genSection = document.createElement('div');
-        genSection.style.cssText = 'margin-top:24px;padding:14px 16px;background:#faf0f0;border-right:3px solid #c26363;border-radius:6px;';
+        genSection.style.cssText = 'margin-top:24px;padding:14px 16px;background:#E3F2FD;border-right:3px solid #1976D2;border-radius:6px;';
         const genTitle = document.createElement('div');
-        genTitle.style.cssText = 'font-size:13px;font-weight:700;color:#c26363;margin-bottom:6px;';
+        genTitle.style.cssText = 'font-size:13px;font-weight:700;color:#1565C0;margin-bottom:6px;';
         genTitle.textContent = 'ملاحظة عامة على المجلس';
         genSection.appendChild(genTitle);
         const genText = document.createElement('div');

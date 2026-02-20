@@ -14,9 +14,10 @@ export default function DarkModeToggle() {
     } else if (stored === 'light') {
       setDark(false);
       document.documentElement.removeAttribute('data-theme');
-    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      setDark(true);
-      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+      // Default to light mode for first-time visitors
+      setDark(false);
+      document.documentElement.removeAttribute('data-theme');
     }
     setMounted(true);
   }, []);

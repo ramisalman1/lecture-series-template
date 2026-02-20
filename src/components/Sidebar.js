@@ -86,6 +86,14 @@ export default function Sidebar({ lectures, isOpen, onClose }) {
           <span className="material-icons-round">update</span>
           <span>سجل التحديثات</span>
         </Link>
+        <Link
+          href="/settings"
+          className={`sidebar__nav-link${pathname === '/settings' ? ' active' : ''}`}
+          onClick={onClose}
+        >
+          <span className="material-icons-round">settings</span>
+          <span>إدارة البيانات</span>
+        </Link>
       </div>
 
       <div className="sidebar__header">المجالس</div>

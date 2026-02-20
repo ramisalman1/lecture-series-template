@@ -82,7 +82,7 @@ export default function ProfileCard() {
     getFilledSections().forEach((section, idx) => {
       const sectionTitle = document.createElement('h2');
       sectionTitle.textContent = `${section.sIdx + 1}. ${section.title}`;
-      sectionTitle.style.cssText = `font-size:17px;color:#c26363;margin:${idx === 0 ? '0' : '24px'} 0 12px;padding-bottom:6px;border-bottom:1px solid #ddd;`;
+      sectionTitle.style.cssText = `font-size:17px;color:#1565C0;margin:${idx === 0 ? '0' : '24px'} 0 12px;padding-bottom:6px;border-bottom:1px solid #ddd;`;
       container.appendChild(sectionTitle);
 
       section.filledFields.forEach(f => {

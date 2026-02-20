@@ -94,7 +94,7 @@ export default function HomePage() {
         </Link>
 
         <Link href="/needs-male" className="home-tool-card">
-          <span className="material-icons-round home-tool-card__icon" style={{ color: '#c26363' }}>male</span>
+          <span className="material-icons-round home-tool-card__icon" style={{ color: '#1565C0' }}>male</span>
           <h3 className="home-tool-card__title">حاجات الرجل</h3>
           <p className="home-tool-card__desc">حاجات الرجل الحقيقية في الزواج من الزوجة — مع التمييز بين الحاجة وما فوقها.</p>
         </Link>
