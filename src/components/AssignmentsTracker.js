@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ASSIGNMENTS_INTRO, ONGOING_ASSIGNMENTS, ASSIGNMENT_SECTIONS } from '../lib/assignments-data';
+import { trackEvent } from '../lib/analytics';
 
 const STORAGE_KEY = 'assignments-progress';
 
@@ -31,6 +32,7 @@ export default function AssignmentsTracker() {
     if (!next[id]) delete next[id];
     setChecked(next);
     saveProgress(next);
+    trackEvent('assignment_toggle', { assignment: id, checked: !checked[id] });
   }
 
   function toggleSection(id) {

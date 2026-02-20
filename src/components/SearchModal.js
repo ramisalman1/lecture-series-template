@@ -219,7 +219,10 @@ export default function SearchModal({ open, onClose }) {
             onChange={handleInput}
             dir="rtl"
           />
-          <kbd className="search-kbd">Esc</kbd>
+          <kbd className="search-kbd search-kbd--desktop">Esc</kbd>
+          <button className="search-close-btn" onClick={onClose} aria-label="إغلاق البحث">
+            <span className="material-icons-round">close</span>
+          </button>
         </div>
 
         <div className="search-body">

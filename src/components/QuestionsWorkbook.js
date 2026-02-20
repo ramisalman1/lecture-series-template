@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { INTRO_GUIDELINES, QUESTIONS_SECTIONS, CLOSING_MESSAGE, CLOSING_DUA } from '../lib/questions-data';
+import { trackEvent } from '../lib/analytics';
 
 const STORAGE_KEY = 'questions-answers';
 
@@ -94,6 +95,7 @@ export default function QuestionsWorkbook() {
 
   async function exportPdf() {
     setExportingPdf(true);
+    trackEvent('pdf_export', { type: 'questions' });
     try {
       const html2pdf = (await import('html2pdf.js')).default;
 

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { trackEvent } from '../../lib/analytics';
 
 const DATA_KEYS = [
   { key: 'lecture-annotations', label: 'الملاحظات والتعليقات', icon: 'sticky_note_2', unit: 'ملاحظة', countFn: v => { try { return JSON.parse(v)?.length || 0; } catch { return 0; } } },
@@ -54,6 +55,7 @@ export default function SettingsPage() {
     a.download = `ألف-باء-الزواج-بياناتي-${new Date().toISOString().slice(0, 10)}.json`;
     a.click();
     URL.revokeObjectURL(url);
+    trackEvent('data_export');
   }
 
   function importData(e) {
@@ -88,6 +90,7 @@ export default function SettingsPage() {
 
         refreshStats();
         setImported(true);
+        trackEvent('data_import');
         setTimeout(() => setImported(false), 3000);
       } catch {
         setImportError('خطأ في قراءة الملف. تأكد أنه ملف JSON صالح.');
@@ -101,6 +104,7 @@ export default function SettingsPage() {
     DATA_KEYS.forEach(({ key }) => localStorage.removeItem(key));
     refreshStats();
     setShowDeleteConfirm(false);
+    trackEvent('data_delete');
     setDeleted(true);
     setTimeout(() => setDeleted(false), 3000);
   }
@@ -108,15 +112,15 @@ export default function SettingsPage() {
   if (!mounted) return null;
 
   return (
-    <main className="main main--settings">
+    <main className="main main--home">
       <div className="settings-page">
-        <h1 className="settings-page__title">
-          <span className="material-icons-round">settings</span>
-          إدارة البيانات
-        </h1>
-        <p className="settings-page__desc">
-          جميع بياناتك محفوظة محليًا في متصفحك فقط ولا تُرسل لأي خادم. يمكنك تصدير نسخة احتياطية أو استيراد بيانات سابقة أو حذف كل شيء.
-        </p>
+        <div className="section-header">
+          <div className="section-header__icon-wrap">
+            <span className="material-icons-round">settings</span>
+          </div>
+          <h1 className="section-header__title">إدارة البيانات</h1>
+          <p className="section-header__desc">جميع بياناتك محفوظة محليًا في متصفحك فقط ولا تُرسل لأي خادم. يمكنك تصدير نسخة احتياطية أو استيراد بيانات سابقة أو حذف كل شيء.</p>
+        </div>
 
         {/* Data Summary */}
         <div className="settings-page__section">

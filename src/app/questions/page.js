@@ -9,10 +9,12 @@ export default function QuestionsPage() {
   return (
     <main className="main main--home">
       <div className="questions-page">
-        <div className="questions-page__header">
-          <span className="material-icons-round questions-page__icon">quiz</span>
-          <h1 className="questions-page__title">كراسة أسئلة الخِطبة</h1>
-          <p className="questions-page__desc">أسئلة للتأمل والتعارف — للخاطب والمخطوبة</p>
+        <div className="section-header">
+          <div className="section-header__icon-wrap">
+            <span className="material-icons-round">quiz</span>
+          </div>
+          <h1 className="section-header__title">كراسة أسئلة الخِطبة</h1>
+          <p className="section-header__desc">أسئلة للتأمل والتعارف — للخاطب والمخطوبة</p>
         </div>
         <QuestionsWorkbook />
       </div>

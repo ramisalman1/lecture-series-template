@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { PROFILE_INTRO, PRIVACY_NOTE, SOURCE_NOTE, PROFILE_SECTIONS } from '../lib/profile-card-data';
+import { trackEvent } from '../lib/analytics';
 
 const STORAGE_KEY = 'profile-card-data';
 
@@ -107,6 +108,7 @@ export default function ProfileCard() {
 
   async function downloadPdf() {
     setExporting(true);
+    trackEvent('pdf_export', { type: 'profile_card' });
     try {
       const html2pdf = (await import('html2pdf.js')).default;
       const container = buildPdfElement(showLabels);

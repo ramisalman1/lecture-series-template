@@ -78,9 +78,6 @@ export default function AllNotesView({ lectures }) {
     return (
       <div className="notes-page__empty">
         {privacyBanner}
-        <div className="notes-page__empty-icon">
-          <span className="material-icons-round">sticky_note_2</span>
-        </div>
         <h2>لا توجد ملاحظات بعد</h2>
         <p>افتح أي مجلس وحدد نصًا لإضافة ملاحظة مرتبطة، أو اكتب ملاحظة عامة</p>
         <Link href="/" className="notes-page__back-btn">

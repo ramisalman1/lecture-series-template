@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useLayoutEffect, useRef, useMemo } from 'react';
 import Link from 'next/link';
+import { trackEvent } from '../lib/analytics';
 
 const STORAGE_KEY = 'lecture-annotations';
 
@@ -398,6 +399,7 @@ export default function AnnotatedContent({ html, slug }) {
     const updated = [...annotations, ann];
     saveAnnotations(updated);
     setAnnotations(updated);
+    trackEvent('note_create', { lecture: slug });
     setSelection(null);
     setSheetData(null);
     setNoteText('');
@@ -453,6 +455,7 @@ export default function AnnotatedContent({ html, slug }) {
     const updated = annotations.filter(a => a.id !== id);
     saveAnnotations(updated);
     setAnnotations(updated);
+    trackEvent('note_delete', { lecture: slug });
   }
 
   function startEdit(ann) {
@@ -513,6 +516,7 @@ export default function AnnotatedContent({ html, slug }) {
       }
       saveAnnotations(all);
       setAnnotations(all);
+      trackEvent('note_create', { lecture: slug, type: 'general' });
       setGeneralSaved(true);
       setTimeout(() => setGeneralSaved(false), 1500);
     }, 500);

@@ -29,10 +29,12 @@ export default function UpdatesPage() {
   return (
     <main className="main main--home">
       <div className="updates-page">
-        <div className="updates-page__header">
-          <span className="material-icons-round updates-page__icon">update</span>
-          <h1 className="updates-page__title">سجل التحديثات</h1>
-          <p className="updates-page__desc">تطويرات وتحديثات الموقع</p>
+        <div className="section-header">
+          <div className="section-header__icon-wrap">
+            <span className="material-icons-round">update</span>
+          </div>
+          <h1 className="section-header__title">سجل التحديثات</h1>
+          <p className="section-header__desc">تطويرات وتحديثات الموقع</p>
         </div>
 
         <div className="updates-page__dua">

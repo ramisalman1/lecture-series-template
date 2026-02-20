@@ -42,10 +42,12 @@ export default function ResourcesPage() {
   return (
     <main className="main main--home">
       <div className="resources-page">
-        <div className="resources-page__header">
-          <span className="material-icons-round resources-page__icon">video_library</span>
-          <h1 className="resources-page__title">مصادر إضافية</h1>
-          <p className="resources-page__desc">مصادر ومجالي إضافية أحيل عليها خلال المجالس</p>
+        <div className="section-header">
+          <div className="section-header__icon-wrap">
+            <span className="material-icons-round">video_library</span>
+          </div>
+          <h1 className="section-header__title">مصادر إضافية</h1>
+          <p className="section-header__desc">مصادر ومجالي إضافية أحيل عليها خلال المجالس</p>
         </div>
 
         <div className="resources-page__list">

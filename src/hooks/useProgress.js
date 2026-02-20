@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { trackEvent } from '../lib/analytics';
 
 const STORAGE_KEY = 'lecture-progress';
 
@@ -30,6 +31,7 @@ export function useProgress() {
     setProgress((prev) => {
       const next = { ...prev, [slug]: { ...prev[slug], read: true } };
       save(next);
+      trackEvent('lecture_complete', { lecture: slug });
       return next;
     });
   }, []);
@@ -47,6 +49,7 @@ export function useProgress() {
       const current = prev[slug] || {};
       const next = { ...prev, [slug]: { ...current, bookmarked: !current.bookmarked } };
       save(next);
+      trackEvent('lecture_bookmark', { lecture: slug });
       return next;
     });
   }, []);

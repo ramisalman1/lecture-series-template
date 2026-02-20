@@ -1,11 +1,24 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import LectureCard from './LectureCard';
 import { ORDINAL_NAMES } from '../lib/constants';
+import { trackEvent } from '../lib/analytics';
 
 export default function SearchFilter({ lectures }) {
   const [query, setQuery] = useState('');
+  const searchTimerRef = useRef(null);
+
+  const handleSearch = useCallback((value) => {
+    setQuery(value);
+    clearTimeout(searchTimerRef.current);
+    const trimmed = value.trim();
+    if (trimmed.length >= 2) {
+      searchTimerRef.current = setTimeout(() => {
+        trackEvent('search', { query: trimmed });
+      }, 500);
+    }
+  }, []);
 
   const filtered = query.trim()
     ? lectures.filter((l) => {
@@ -29,7 +42,7 @@ export default function SearchFilter({ lectures }) {
           className="search-filter__input"
           placeholder="ابحث في المجالس..."
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e) => handleSearch(e.target.value)}
         />
         {query && (
           <button

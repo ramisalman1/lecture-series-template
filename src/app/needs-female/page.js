@@ -10,9 +10,12 @@ export default function NeedsFemalePage() {
   return (
     <main className="main main--home">
       <div className="qa-page">
-        <div className="qa-page__header">
-          <h1 className="qa-page__title">حاجات الأنثى من الزواج</h1>
-          <p className="qa-page__desc">حاجات الأنثى الحقيقية في الزواج — من واقع مشاركات جمهور مجالس ألف باء الزواج</p>
+        <div className="section-header">
+          <div className="section-header__icon-wrap">
+            <span className="material-icons-round">female</span>
+          </div>
+          <h1 className="section-header__title">حاجات الأنثى من الزواج</h1>
+          <p className="section-header__desc">حاجات الأنثى الحقيقية في الزواج — من واقع مشاركات جمهور مجالس ألف باء الزواج</p>
         </div>
         <NeedsChecklist
           sections={NEEDS_FEMALE_SECTIONS}

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { trackEvent } from '../lib/analytics';
 
 export default function DarkModeToggle() {
   const [dark, setDark] = useState(false);
@@ -25,6 +26,7 @@ export default function DarkModeToggle() {
   function toggle() {
     const next = !dark;
     setDark(next);
+    const newTheme = next ? 'dark' : 'light';
     if (next) {
       document.documentElement.setAttribute('data-theme', 'dark');
       localStorage.setItem('theme', 'dark');
@@ -32,6 +34,7 @@ export default function DarkModeToggle() {
       document.documentElement.removeAttribute('data-theme');
       localStorage.setItem('theme', 'light');
     }
+    trackEvent('theme_toggle', { theme: newTheme });
   }
 
   if (!mounted) return null;

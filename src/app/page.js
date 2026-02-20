@@ -58,43 +58,57 @@ export default function HomePage() {
       {/* Quick Tools */}
       <div className="home-tools-grid">
         <Link href="/questions" className="home-tool-card">
-          <span className="material-icons-round home-tool-card__icon">quiz</span>
+          <div className="home-tool-card__icon-wrap">
+            <span className="material-icons-round">quiz</span>
+          </div>
           <h3 className="home-tool-card__title">أسئلة الخاطب والمخطوبة</h3>
           <p className="home-tool-card__desc">كراسة أسئلة للتعارف قبل الزواج مبنية على فقه النفس. أجب عنها وصدّرها لمشاركتها.</p>
         </Link>
 
         <Link href="/profile-card" className="home-tool-card">
-          <span className="material-icons-round home-tool-card__icon">badge</span>
+          <div className="home-tool-card__icon-wrap">
+            <span className="material-icons-round">badge</span>
+          </div>
           <h3 className="home-tool-card__title">بطاقة التعارف</h3>
           <p className="home-tool-card__desc">ورقة تعريف بالنفس تُرسل للطرف الآخر قبل اللقاء الشخصي. املأها وصدّرها كـ PDF.</p>
         </Link>
 
         <Link href="/assignments" className="home-tool-card">
-          <span className="material-icons-round home-tool-card__icon">task_alt</span>
+          <div className="home-tool-card__icon-wrap">
+            <span className="material-icons-round">task_alt</span>
+          </div>
           <h3 className="home-tool-card__title">التكليفات</h3>
           <p className="home-tool-card__desc">تكليفات عملية وكتابية من المجالس. سجّل التزامك وتابع تقدّمك.</p>
         </Link>
 
         <Link href="/resources" className="home-tool-card">
-          <span className="material-icons-round home-tool-card__icon">video_library</span>
+          <div className="home-tool-card__icon-wrap">
+            <span className="material-icons-round">video_library</span>
+          </div>
           <h3 className="home-tool-card__title">مصادر إضافية</h3>
           <p className="home-tool-card__desc">جلسات وبثوث ومحتوى مكمّل من متحدثين آخرين حول الزواج والأسرة.</p>
         </Link>
 
         <Link href="/qa" className="home-tool-card">
-          <span className="material-icons-round home-tool-card__icon">help_center</span>
+          <div className="home-tool-card__icon-wrap">
+            <span className="material-icons-round">help_center</span>
+          </div>
           <h3 className="home-tool-card__title">أسئلة وأجوبة</h3>
           <p className="home-tool-card__desc">فهرس شامل للأسئلة والأجوبة من المجالس مُنظَّم حسب الموضوع.</p>
         </Link>
 
-<Link href="/needs-female" className="home-tool-card">
-          <span className="material-icons-round home-tool-card__icon" style={{ color: '#E91E63' }}>female</span>
+        <Link href="/needs-female" className="home-tool-card">
+          <div className="home-tool-card__icon-wrap home-tool-card__icon-wrap--pink">
+            <span className="material-icons-round">female</span>
+          </div>
           <h3 className="home-tool-card__title">حاجات الأنثى</h3>
           <p className="home-tool-card__desc">حاجات الأنثى الحقيقية في الزواج من الزوج والمنزل — مع التمييز بين الحاجة وما فوقها.</p>
         </Link>
 
         <Link href="/needs-male" className="home-tool-card">
-          <span className="material-icons-round home-tool-card__icon" style={{ color: '#1565C0' }}>male</span>
+          <div className="home-tool-card__icon-wrap home-tool-card__icon-wrap--blue">
+            <span className="material-icons-round">male</span>
+          </div>
           <h3 className="home-tool-card__title">حاجات الرجل</h3>
           <p className="home-tool-card__desc">حاجات الرجل الحقيقية في الزواج من الزوجة — مع التمييز بين الحاجة وما فوقها.</p>
         </Link>

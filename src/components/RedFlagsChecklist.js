@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { REDFLAGS_INTRO, REDFLAGS_CATEGORIES } from '../lib/redflags-data';
+import { trackEvent } from '../lib/analytics';
 
 const STORAGE_KEY = 'redflags-checked';
 
@@ -30,6 +31,7 @@ export default function RedFlagsChecklist() {
     if (!next[id]) delete next[id];
     setChecked(next);
     saveChecked(next);
+    trackEvent('redflag_toggle', { flag: id, checked: !checked[id] });
   }
 
   function toggleSection(id) {

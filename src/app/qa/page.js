@@ -9,10 +9,12 @@ export default function QAPage() {
   return (
     <main className="main main--home">
       <div className="qa-page">
-        <div className="qa-page__header">
-          <span className="material-icons-round qa-page__icon">quiz</span>
-          <h1 className="qa-page__title">فهرس الأسئلة والأجوبة</h1>
-          <p className="qa-page__desc">أسئلة مُستخرجة من المجالس — اضغط على أيّ سؤال للانتقال إلى الإجابة الكاملة في سياقها</p>
+        <div className="section-header">
+          <div className="section-header__icon-wrap">
+            <span className="material-icons-round">help_center</span>
+          </div>
+          <h1 className="section-header__title">فهرس الأسئلة والأجوبة</h1>
+          <p className="section-header__desc">أسئلة مُستخرجة من المجالس — اضغط على أيّ سؤال للانتقال إلى الإجابة الكاملة في سياقها</p>
         </div>
         <QAIndex />
       </div>

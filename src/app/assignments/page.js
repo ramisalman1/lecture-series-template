@@ -9,10 +9,12 @@ export default function AssignmentsPage() {
   return (
     <main className="main main--home">
       <div className="assignments-page">
-        <div className="assignments-page__header">
-          <span className="material-icons-round assignments-page__icon">task_alt</span>
-          <h1 className="assignments-page__title">التكليفات</h1>
-          <p className="assignments-page__desc">تكليفات عملية وكتابية مُستخرجة من المجالس — سجّل التزامك وتابع تقدّمك</p>
+        <div className="section-header">
+          <div className="section-header__icon-wrap">
+            <span className="material-icons-round">task_alt</span>
+          </div>
+          <h1 className="section-header__title">التكليفات</h1>
+          <p className="section-header__desc">تكليفات عملية وكتابية مُستخرجة من المجالس — سجّل التزامك وتابع تقدّمك</p>
         </div>
         <AssignmentsTracker />
       </div>

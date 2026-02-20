@@ -1,230 +1,300 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { usePathname } from 'next/navigation';
 import { driver } from 'driver.js';
 import 'driver.js/dist/driver.css';
 
-const TOUR_KEY = 'tour-completed';
-const PHASE_KEY = 'tour-phase';
-const ANN_KEY = 'lecture-annotations';
-const SAMPLE_ANN_ID = 'tour_sample_annotation';
+const HOME_KEY = 'tour-home-done';
+const LECTURE_KEY = 'tour-lecture-done';
 
-function markComplete() {
-  try {
-    localStorage.setItem(TOUR_KEY, '1');
-    localStorage.removeItem(PHASE_KEY);
-  } catch {}
-}
-
-function injectSampleAnnotation() {
-  try {
-    const existing = JSON.parse(localStorage.getItem(ANN_KEY)) || [];
-    if (existing.some(a => a.id === SAMPLE_ANN_ID)) return;
-    existing.push({
-      id: SAMPLE_ANN_ID,
-      slug: 'lecture-01',
-      pIndex: 0,
-      selectedText: 'الحمد لله رب العالمين',
-      note: 'هذه ملاحظة تجريبية — يمكنك تعديلها أو حذفها.',
-      createdAt: Date.now(),
-    });
-    localStorage.setItem(ANN_KEY, JSON.stringify(existing));
-  } catch {}
-}
-
-function addSkipButton(popover, tourDriver) {
-  const navBtns = popover.footerButtons;
-  if (!navBtns || navBtns.querySelector('.driver-popover-skip-btn')) return;
-  const skipBtn = document.createElement('button');
-  skipBtn.textContent = 'تخطي';
-  skipBtn.className = 'driver-popover-skip-btn';
-  skipBtn.addEventListener('click', () => {
-    tourDriver.destroy();
+function waitFor(selector, timeout = 4000) {
+  return new Promise((resolve) => {
+    if (document.querySelector(selector)) return resolve(true);
+    const start = Date.now();
+    const iv = setInterval(() => {
+      if (document.querySelector(selector) || Date.now() - start > timeout) {
+        clearInterval(iv);
+        resolve(!!document.querySelector(selector));
+      }
+    }, 100);
   });
-  navBtns.appendChild(skipBtn);
 }
 
-function runPhase1() {
-  const tourDriver = driver({
+function runHomeTour() {
+  const ref = {};
+  ref.d = driver({
     showProgress: true,
-    progressText: '{{current}} من {{total}}',
+    progressText: '{{current}} / {{total}}',
     nextBtnText: 'التالي',
     prevBtnText: 'السابق',
-    doneBtnText: 'التالي',
-    popoverClass: 'driver-popover-rtl',
+    doneBtnText: 'تم',
+    popoverClass: 'tour-popover',
+    showButtons: ['next', 'previous', 'close'],
     allowClose: true,
-    overlayColor: 'rgba(0,0,0,0.6)',
-    onPopoverRender: (popover) => {
-      addSkipButton(popover, tourDriver);
+    overlayColor: 'rgba(0,0,0,0.5)',
+    overlayOpacity: 1,
+    stagePadding: 12,
+    stageRadius: 12,
+    smoothScroll: true,
+    animate: true,
+    onDestroyed: () => {
+      try { localStorage.setItem(HOME_KEY, '1'); } catch {}
     },
     steps: [
       {
-        popover: {
-          title: 'مرحبًا بك 👋',
-          description: 'دعنا نأخذك في جولة سريعة للتعرّف على الموقع وأدواته.',
-        },
-      },
-      {
         element: '.sidebar__list',
+        onHighlightStarted: () => {
+          const btn = document.querySelector('.header__menu-btn');
+          if (btn) btn.click();
+          return new Promise(r => setTimeout(r, 350));
+        },
         popover: {
           title: 'قائمة المجالس',
-          description: 'هذه قائمة المجالس الـ ٥٣.\nيمكنك تتبع تقدمك وحفظ المفضلة من القائمة.',
-          onHighlightStarted: () => {
-            const menuBtn = document.querySelector('.header__menu-btn');
-            if (menuBtn) menuBtn.click();
-            return new Promise(resolve => setTimeout(resolve, 350));
-          },
+          description: '٥٣ مجلسًا مرتّبًا بعناية. كل مجلس يظهر حالته — مقروء أو في المفضّلة.',
         },
       },
       {
-        element: '.sidebar__nav-links',
+        element: '.sidebar__nav-link[href="/notes"]',
         popover: {
-          title: 'أدوات ومحتوى إضافي',
-          description: 'ملاحظاتك، أسئلة الخِطبة، بطاقة التعارف، إدارة البيانات، والمزيد.',
+          title: 'ملاحظاتي',
+          description: 'جميع ملاحظاتك مجمّعة في مكان واحد، مرتّبة حسب المجلس.',
+        },
+      },
+      {
+        element: '.sidebar__nav-link[href="/assignments"]',
+        popover: {
+          title: 'التكليفات',
+          description: 'مهامّ عملية مطلوبة منك بعد كل مجلس لتطبيق ما تعلّمته.',
+        },
+      },
+      {
+        element: '.sidebar__nav-link[href="/qa"]',
+        popover: {
+          title: 'أسئلة وأجوبة',
+          description: 'فهرس لأهم الأسئلة المطروحة في المجالس مع إجاباتها.',
+        },
+      },
+      {
+        element: '.sidebar__nav-link[href="/profile-card"]',
+        popover: {
+          title: 'بطاقة التعارف',
+          description: 'أنشئ بطاقة تعريفية شخصية تلخّص معلوماتك الأساسية.',
+        },
+      },
+      {
+        element: '.sidebar__nav-link[href="/questions"]',
+        popover: {
+          title: 'أسئلة الخِطبة',
+          description: 'أسئلة مُعدّة للتعارف خلال مرحلة الخِطبة.',
+        },
+      },
+      {
+        element: '.sidebar__nav-link[href="/needs-female"]',
+        popover: {
+          title: 'حاجات الذكر والأنثى',
+          description: 'تجميع لأهم حاجات الطرفين من واقع مشاركات جمهور المجالس.',
+        },
+      },
+      {
+        element: '.sidebar__nav-link[href="/resources"]',
+        popover: {
+          title: 'مصادر إضافية',
+          description: 'مصادر إضافية ذُكرت في المحاضرات للتوسّع والاستزادة.',
+        },
+      },
+      {
+        element: '.sidebar__nav-link[href="/updates"]',
+        popover: {
+          title: 'سجل التحديثات',
+          description: 'يعرض كافة التحديثات والتغييرات على الموقع.',
+        },
+      },
+      {
+        element: '.sidebar__nav-link[href="/settings"]',
+        popover: {
+          title: 'الإعدادات',
+          description: 'تصدير بياناتك واستيرادها، وتخصيص تجربتك.',
         },
       },
       {
         element: '.home-stats',
-        popover: {
-          title: 'شريط التقدم',
-          description: 'يُظهر عدد المجالس التي أتممتها من أصل ٥٣ مجلسًا.',
-          onHighlightStarted: () => {
-            const overlay = document.querySelector('.sidebar-overlay');
-            if (overlay) overlay.click();
-            return new Promise(resolve => setTimeout(resolve, 300));
-          },
+        onHighlightStarted: () => {
+          const o = document.querySelector('.sidebar-overlay');
+          if (o) o.click();
+          return new Promise(r => setTimeout(r, 300));
         },
-      },
-      {
-        element: '.home-tools-grid',
         popover: {
-          title: 'أدوات تفاعلية',
-          description: 'أدوات مبنية على محتوى المجالس.\nجرّبها بعد الجولة!',
-          side: 'top',
-          align: 'center',
-        },
-      },
-      {
-        popover: {
-          title: 'لننتقل إلى المجلس الأول',
-          description: 'الآن دعنا نفتح المجلس الأول ونتعرّف على أدوات القراءة والملاحظات.',
-          onNextClick: () => {
-            try {
-              localStorage.setItem(PHASE_KEY, '2');
-              injectSampleAnnotation();
-            } catch {}
-            window.location.href = '/lectures/lecture-01';
-          },
+          title: 'شريط التقدّم',
+          description: 'يوضّح كم مجلسًا أتممت من أصل ٥٣.',
         },
       },
     ],
-    onDestroyed: () => {
-      try {
-        if (localStorage.getItem(PHASE_KEY) !== '2') {
-          markComplete();
-        }
-      } catch {
-        markComplete();
-      }
-    },
   });
-
-  tourDriver.drive();
+  ref.d.drive();
 }
 
-function runPhase2() {
-  const tourDriver = driver({
+async function runLectureTour() {
+  const ready = await waitFor('.lecture-toolbar__inner');
+  if (!ready) return;
+  await waitFor('.notes-fab');
+
+  const ref = {};
+  ref.d = driver({
     showProgress: true,
-    progressText: '{{current}} من {{total}}',
+    progressText: '{{current}} / {{total}}',
     nextBtnText: 'التالي',
     prevBtnText: 'السابق',
-    doneBtnText: 'إنهاء',
-    popoverClass: 'driver-popover-rtl',
+    doneBtnText: 'تم',
+    popoverClass: 'tour-popover',
+    showButtons: ['next', 'previous', 'close'],
     allowClose: true,
-    overlayColor: 'rgba(0,0,0,0.6)',
-    onPopoverRender: (popover) => {
-      addSkipButton(popover, tourDriver);
+    overlayColor: 'rgba(0,0,0,0.5)',
+    overlayOpacity: 1,
+    stagePadding: 12,
+    stageRadius: 12,
+    smoothScroll: true,
+    animate: true,
+    onDestroyed: () => {
+      try { localStorage.setItem(LECTURE_KEY, '1'); } catch {}
     },
     steps: [
       {
         element: '.content [data-p="0"]',
         popover: {
           title: 'نص المجلس',
-          description: 'على الحاسوب: حدّد نصًا لإضافة ملاحظة.\nعلى الجوّال: اضغط زر + الأخضر ثم اضغط الفقرة.',
+          description: 'حدّد أي نص لإضافة ملاحظة شخصية عليه. على الجوّال: فعّل وضع التعليق ثم اضغط الفقرة.',
           side: 'bottom',
           align: 'center',
         },
       },
       {
-        element: '.lecture-toolbar__inner > :nth-child(2)',
+        element: '.lecture-toolbar__inner > :nth-child(1)',
         popover: {
-          title: 'قُرئت',
-          description: 'اضغط هنا لتحديد المجلس كمقروء.\nسيظهر ذلك في القائمة الجانبية وشريط التقدم.',
+          title: 'المفضّلة',
+          description: 'أضف المجلس للمفضّلة للعودة إليه بسرعة من القائمة الجانبية.',
         },
       },
       {
-        element: '.lecture-toolbar__inner > :nth-child(1)',
+        element: '.lecture-toolbar__inner > :nth-child(2)',
         popover: {
-          title: 'المفضلة',
-          description: 'أضف المجلس للمفضلة للعودة إليه بسرعة من القائمة الجانبية.',
+          title: 'تحديد كمقروء',
+          description: 'حدّد المجلس كمقروء ليُحتسب في شريط تقدّمك على الصفحة الرئيسية.',
+        },
+      },
+      {
+        element: '.lecture-toolbar__inner > :nth-child(3)',
+        popover: {
+          title: 'ملاحظات بجانب النص',
+          description: 'أظهر أو أخفِ ملاحظاتك داخل النص مباشرة بجانب الفقرات المرتبطة بها.',
+        },
+      },
+      {
+        element: '.lecture-toolbar__inner > :nth-child(4)',
+        popover: {
+          title: 'تصدير PDF',
+          description: 'صدّر المجلس كملف PDF مع ملاحظاتك لحفظه أو طباعته.',
+        },
+      },
+      {
+        element: '.lecture-toolbar__inner > :nth-child(5)',
+        popover: {
+          title: 'مشاركة المجلس',
+          description: 'شارك رابط المجلس عبر تويتر أو تلغرام أو واتساب أو انسخ الرابط.',
         },
       },
       {
         element: '.notes-fab',
         popover: {
           title: 'درج الملاحظات',
-          description: 'اضغط هنا لفتح درج الملاحظات واستعراض كل ملاحظاتك على هذا المجلس.',
-        },
-      },
-      {
-        element: '.lecture-toolbar__inner > :nth-child(3)',
-        popover: {
-          title: 'ملاحظات داخل النص',
-          description: 'أظهر أو أخفِ الملاحظات داخل النص.\nأضفنا لك ملاحظة تجريبية — جرّب تعديلها أو حذفها!',
-        },
-      },
-      {
-        popover: {
-          title: 'أنت جاهز! 🎉',
-          description: 'استكشف المجالس بحرية.\nيمكنك تصدير واستيراد بياناتك من «إدارة البيانات» في القائمة الجانبية.\nرحلة معرفية ممتعة!',
+          description: 'افتح درج الملاحظات لاستعراض كل ملاحظاتك على هذا المجلس وإضافة ملاحظات جديدة.',
         },
       },
     ],
-    onDestroyed: () => {
-      markComplete();
-    },
   });
+  ref.d.drive();
+}
 
-  tourDriver.drive();
+/* ── Welcome Modal (custom) ── */
+function WelcomeModal({ onStart, onSkip }) {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    requestAnimationFrame(() => setVisible(true));
+  }, []);
+
+  return (
+    <div className={`welcome-overlay${visible ? ' welcome-overlay--visible' : ''}`}>
+      <div className={`welcome-card${visible ? ' welcome-card--visible' : ''}`}>
+        <div className="welcome-card__badge">ألف باء</div>
+        <h1 className="welcome-card__title">أهلًا بك في ألف باء الزواج</h1>
+        <p className="welcome-card__desc">
+          سلسلة من <strong>٥٣ مجلسًا معرفيًا</strong> تتناول أسس الزواج ومقدّماته
+          — من فهم النفس والآخر، إلى الخِطبة والحياة الزوجية.
+        </p>
+        <div className="welcome-card__features">
+          <div className="welcome-card__feature">
+            <span className="material-icons-round">menu_book</span>
+            <span>٥٣ مجلسًا مرتّبًا</span>
+          </div>
+          <div className="welcome-card__feature">
+            <span className="material-icons-round">edit_note</span>
+            <span>ملاحظات شخصية</span>
+          </div>
+          <div className="welcome-card__feature">
+            <span className="material-icons-round">quiz</span>
+            <span>أدوات تفاعلية</span>
+          </div>
+        </div>
+        <div className="welcome-card__actions">
+          <button className="welcome-card__btn welcome-card__btn--primary" onClick={onStart}>
+            خذني في جولة سريعة
+          </button>
+          <button className="welcome-card__btn welcome-card__btn--ghost" onClick={onSkip}>
+            تخطّي، أريد استكشاف بنفسي
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default function OnboardingTour() {
   const pathname = usePathname();
+  const [showWelcome, setShowWelcome] = useState(false);
+  const [showLectureTip, setShowLectureTip] = useState(false);
 
   useEffect(() => {
     try {
-      if (localStorage.getItem(TOUR_KEY)) return;
-    } catch {
-      return;
-    }
-
-    let timeout;
-
-    try {
-      const phase = localStorage.getItem(PHASE_KEY);
-
-      if (phase === '2' && pathname.startsWith('/lectures/lecture-01')) {
-        timeout = setTimeout(runPhase2, 800);
-      } else if (!phase && pathname === '/') {
-        timeout = setTimeout(runPhase1, 600);
+      if (pathname === '/' && !localStorage.getItem(HOME_KEY)) {
+        setShowWelcome(true);
+      }
+      const m = pathname.match(/^\/lectures\/(lecture-\d+)/);
+      if (m && !localStorage.getItem(LECTURE_KEY)) {
+        setShowLectureTip(true);
       }
     } catch {}
-
-    return () => {
-      if (timeout) clearTimeout(timeout);
-    };
   }, [pathname]);
+
+  const dismissWelcome = useCallback(() => {
+    setShowWelcome(false);
+    try { localStorage.setItem(HOME_KEY, '1'); } catch {}
+  }, []);
+
+  const startHomeTour = useCallback(() => {
+    setShowWelcome(false);
+    setTimeout(runHomeTour, 400);
+  }, []);
+
+  useEffect(() => {
+    if (!showLectureTip) return;
+    setShowLectureTip(false);
+    setTimeout(() => runLectureTour(), 600);
+  }, [showLectureTip]);
+
+  if (showWelcome) {
+    return <WelcomeModal onStart={startHomeTour} onSkip={dismissWelcome} />;
+  }
 
   return null;
 }

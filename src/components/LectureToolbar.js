@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useProgressContext } from './ProgressProvider';
+import { trackEvent } from '../lib/analytics';
 
 const TOTAL_LECTURES = 53;
 const ANNOTATIONS_KEY = 'lecture-annotations';
@@ -57,6 +58,7 @@ export default function LectureToolbar({ slug, title }) {
 
   async function exportLecturePdf() {
     setExportingPdf(true);
+    trackEvent('pdf_export', { type: 'lecture', lecture: slug });
     try {
       const html2pdf = (await import('html2pdf.js')).default;
 

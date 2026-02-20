@@ -9,10 +9,12 @@ export default function ProfileCardPage() {
   return (
     <main className="main main--home">
       <div className="profile-card-page">
-        <div className="profile-card-page__header">
-          <span className="material-icons-round profile-card-page__icon">badge</span>
-          <h1 className="profile-card-page__title">بطاقة التعارف</h1>
-          <p className="profile-card-page__desc">ورقة تعريف بالنفس للتعارف قبل الزواج</p>
+        <div className="section-header">
+          <div className="section-header__icon-wrap">
+            <span className="material-icons-round">badge</span>
+          </div>
+          <h1 className="section-header__title">بطاقة التعارف</h1>
+          <p className="section-header__desc">ورقة تعريف بالنفس للتعارف قبل الزواج</p>
         </div>
         <ProfileCard />
       </div>

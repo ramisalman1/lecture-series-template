@@ -9,10 +9,12 @@ export default function RedFlagsPage() {
   return (
     <main className="main main--home">
       <div className="qa-page">
-        <div className="qa-page__header">
-          <span className="material-icons-round qa-page__icon" style={{ color: '#E53935' }}>flag</span>
-          <h1 className="qa-page__title">العلامات الحمراء</h1>
-          <p className="qa-page__desc">علامات تحذيرية يجب الانتباه لها عند اختيار شريك الحياة — حدّد ما ينطبق على حالتك</p>
+        <div className="section-header">
+          <div className="section-header__icon-wrap section-header__icon-wrap--red">
+            <span className="material-icons-round">flag</span>
+          </div>
+          <h1 className="section-header__title">العلامات الحمراء</h1>
+          <p className="section-header__desc">علامات تحذيرية يجب الانتباه لها عند اختيار شريك الحياة — حدّد ما ينطبق على حالتك</p>
         </div>
         <RedFlagsChecklist />
       </div>
