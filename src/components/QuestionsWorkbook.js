@@ -37,7 +37,6 @@ export default function QuestionsWorkbook() {
   const [previewMode, setPreviewMode] = useState(false);
   const [mounted, setMounted] = useState(false);
   const saveTimerRef = useRef(null);
-  const fileInputRef = useRef(null);
 
   useEffect(() => {
     setAnswers(loadAnswers());
@@ -93,17 +92,6 @@ export default function QuestionsWorkbook() {
 
   const [exportingPdf, setExportingPdf] = useState(false);
 
-  function exportAnswers() {
-    const data = JSON.stringify(answers, null, 2);
-    const blob = new Blob([data], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'ola-questions-backup.json';
-    a.click();
-    URL.revokeObjectURL(url);
-  }
-
   async function exportPdf() {
     setExportingPdf(true);
     try {
@@ -124,7 +112,7 @@ export default function QuestionsWorkbook() {
 
         const title = document.createElement('h2');
         title.textContent = `${sIdx + 1}. ${section.title}`;
-        title.style.cssText = `font-size:17px;color:#c26363;margin:${sIdx === 0 ? '0' : '24px'} 0 14px;padding-bottom:6px;border-bottom:1px solid #ddd;`;
+        title.style.cssText = `font-size:17px;color:#1565C0;margin:${sIdx === 0 ? '0' : '24px'} 0 14px;padding-bottom:6px;border-bottom:1px solid #ddd;`;
         container.appendChild(title);
 
         answered.forEach(q => {
@@ -136,7 +124,7 @@ export default function QuestionsWorkbook() {
           if (q.mine) {
             const label = document.createElement('p');
             label.textContent = 'إجابتي:';
-            label.style.cssText = 'font-size:12px;color:#c26363;font-weight:600;margin:4px 0 2px;';
+            label.style.cssText = 'font-size:12px;color:#1565C0;font-weight:600;margin:4px 0 2px;';
             container.appendChild(label);
 
             const val = document.createElement('p');
@@ -170,32 +158,6 @@ export default function QuestionsWorkbook() {
     } finally {
       setExportingPdf(false);
     }
-  }
-
-  function importAnswers(e) {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      try {
-        const imported = JSON.parse(ev.target.result);
-        if (typeof imported !== 'object' || Array.isArray(imported)) return;
-        // Migrate old-format keys from imported data too
-        const migratedImport = {};
-        for (const [key, value] of Object.entries(imported)) {
-          if (!key.endsWith('-mine') && !key.endsWith('-partner')) {
-            migratedImport[`${key}-mine`] = value;
-          } else {
-            migratedImport[key] = value;
-          }
-        }
-        const merged = { ...answers, ...migratedImport };
-        setAnswers(merged);
-        saveAnswers(merged);
-      } catch { /* invalid JSON */ }
-    };
-    reader.readAsText(file);
-    e.target.value = '';
   }
 
   // Preview mode: compute sections that have at least one answer
@@ -251,21 +213,6 @@ export default function QuestionsWorkbook() {
           <span className="material-icons-round">{exportingPdf ? 'hourglass_empty' : 'picture_as_pdf'}</span>
           {exportingPdf ? 'جارٍ التصدير...' : 'تصدير PDF'}
         </button>
-        <button className="questions-page__toolbar-btn" onClick={exportAnswers} disabled={totalAnswered === 0}>
-          <span className="material-icons-round">file_download</span>
-          نسخة احتياطية
-        </button>
-        <button className="questions-page__toolbar-btn" onClick={() => fileInputRef.current?.click()}>
-          <span className="material-icons-round">file_upload</span>
-          استيراد
-        </button>
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept=".json"
-          onChange={importAnswers}
-          style={{ display: 'none' }}
-        />
       </div>
 
       {/* Preview Mode */}

@@ -1,107 +1,96 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+import { usePathname } from 'next/navigation';
+import { driver } from 'driver.js';
+import 'driver.js/dist/driver.css';
 
 const TOUR_KEY = 'tour-completed';
 
-const slides = [
-  {
-    icon: 'auto_stories',
-    title: 'مرحبًا بك في ألف باء الزواج',
-    body: 'سلسلة مجالس معرفية شاملة تتناول أسس الزواج ومقدماته.\nتصفّح المجالس بالترتيب أو اختر ما يناسبك من القائمة الجانبية.',
-  },
-  {
-    icon: 'trending_up',
-    title: 'تتبّع تقدمك',
-    body: 'حدّد المجلس كـ«مقروء» لتتابع تقدّمك عبر شريط التقدم في القائمة الجانبية.\nيمكنك أيضًا حفظ المجالس في المفضلة للعودة إليها لاحقًا.',
-  },
-  {
-    icon: 'edit_note',
-    title: 'أضف ملاحظاتك',
-    body: 'على الحاسوب: حدّد نصًا وستظهر نافذة لإضافة ملاحظتك.\nعلى الجوال: اضغط زر + الأخضر ثم اضغط على الفقرة المطلوبة.\nملاحظاتك خاصة ومحفوظة على جهازك فقط.',
-  },
-  {
-    icon: 'folder_open',
-    title: 'أدِر ملاحظاتك',
-    body: 'عدّل أو احذف ملاحظاتك من الدرج الجانبي أو من صفحة الملاحظات.\nيمكنك تصدير ملاحظاتك واستيرادها للانتقال بين الأجهزة.',
-  },
-  {
-    icon: 'handyman',
-    title: 'أدوات تفاعلية',
-    body: 'استكشف أدوات مخصصة: أسئلة الخِطبة، بطاقة التعارف، التكليفات، حاجات الأنثى والرجل من الزواج، أسئلة وأجوبة، والمزيد.\nتجدها في القائمة الجانبية أو على الصفحة الرئيسية.',
-  },
-  {
-    icon: 'rocket_launch',
-    title: 'ابدأ رحلتك المعرفية',
-    body: 'ثلاثة وخمسون مجلسًا تنتظرك.\nابدأ من المجلس الأول أو اختر الموضوع الذي يهمك.',
-  },
-];
-
 export default function OnboardingTour() {
-  const [show, setShow] = useState(false);
-  const [current, setCurrent] = useState(0);
+  const pathname = usePathname();
 
   useEffect(() => {
+    if (pathname !== '/') return;
+
     try {
-      if (!localStorage.getItem(TOUR_KEY)) {
-        setShow(true);
-      }
-    } catch {}
-  }, []);
-
-  function dismiss() {
-    try { localStorage.setItem(TOUR_KEY, '1'); } catch {}
-    setShow(false);
-  }
-
-  function next() {
-    if (current < slides.length - 1) {
-      setCurrent(current + 1);
-    } else {
-      dismiss();
+      if (localStorage.getItem(TOUR_KEY)) return;
+    } catch {
+      return;
     }
-  }
 
-  function prev() {
-    if (current > 0) setCurrent(current - 1);
-  }
+    // Small delay so the page DOM is fully rendered
+    const timeout = setTimeout(() => {
+      const tourDriver = driver({
+        showProgress: true,
+        progressText: '{{current}} من {{total}}',
+        nextBtnText: 'التالي',
+        prevBtnText: 'السابق',
+        doneBtnText: 'ابدأ الآن',
+        popoverClass: 'driver-popover-rtl',
+        allowClose: true,
+        overlayColor: 'rgba(0,0,0,0.6)',
+        steps: [
+          {
+            popover: {
+              title: 'مرحبًا بك في ألف باء الزواج',
+              description: 'سلسلة مجالس معرفية شاملة تتناول أسس الزواج ومقدماته. دعنا نأخذك في جولة سريعة!',
+            },
+          },
+          {
+            element: '.header__search-btn',
+            popover: {
+              title: 'البحث',
+              description: 'استخدم البحث للوصول السريع لأي مجلس أو موضوع.',
+            },
+          },
+          {
+            element: '.dark-mode-toggle',
+            popover: {
+              title: 'الوضع الليلي',
+              description: 'بدّل بين الوضع الفاتح والداكن حسب راحتك.',
+            },
+          },
+          {
+            element: '.home-banner',
+            popover: {
+              title: 'المجالس المعرفية',
+              description: 'تصفّح ٥٣ مجلسًا معرفيًا بالترتيب أو اختر ما يناسبك.',
+            },
+          },
+          {
+            element: '.home-stats',
+            popover: {
+              title: 'تقدّمك',
+              description: 'تابع تقدّمك في قراءة المجالس من شريط التقدم.',
+            },
+          },
+          {
+            element: '.home-tools-grid',
+            popover: {
+              title: 'أدوات تفاعلية',
+              description: 'أدوات مخصصة: أسئلة الخِطبة، بطاقة التعارف، التكليفات، وغيرها.',
+            },
+          },
+          {
+            popover: {
+              title: 'إدارة البيانات',
+              description: 'يمكنك تصدير واستيراد جميع بياناتك من صفحة إدارة البيانات في القائمة الجانبية.',
+            },
+          },
+        ],
+        onDestroyed: () => {
+          try {
+            localStorage.setItem(TOUR_KEY, '1');
+          } catch {}
+        },
+      });
 
-  if (!show) return null;
+      tourDriver.drive();
+    }, 600);
 
-  const slide = slides[current];
-  const isLast = current === slides.length - 1;
+    return () => clearTimeout(timeout);
+  }, [pathname]);
 
-  return (
-    <div className="tour-overlay">
-      <div className="tour-slide">
-        <button className="tour-skip" onClick={dismiss}>تخطّي</button>
-
-        <span className="material-icons-round tour-slide__icon">{slide.icon}</span>
-        <h2 className="tour-slide__title">{slide.title}</h2>
-        <p className="tour-slide__body">{slide.body}</p>
-
-        <div className="tour-dots">
-          {slides.map((_, i) => (
-            <span
-              key={i}
-              className={`tour-dot${i === current ? ' tour-dot--active' : ''}`}
-            />
-          ))}
-        </div>
-
-        <div className="tour-actions">
-          {current > 0 && (
-            <button className="tour-btn tour-btn--secondary" onClick={prev}>
-              <span className="material-icons-round">arrow_forward</span>
-              السابق
-            </button>
-          )}
-          <button className="tour-btn tour-btn--primary" onClick={next}>
-            {isLast ? 'ابدأ الآن' : 'التالي'}
-            {!isLast && <span className="material-icons-round">arrow_back</span>}
-          </button>
-        </div>
-      </div>
-    </div>
-  );
+  return null;
 }

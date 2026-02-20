@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 const STORAGE_KEY = 'lecture-annotations';
@@ -21,44 +21,12 @@ export default function AllNotesView({ lectures }) {
   const [filter, setFilter] = useState('all');
   const [editingId, setEditingId] = useState(null);
   const [editText, setEditText] = useState('');
-  const fileInputRef = useRef(null);
-
   useEffect(() => {
     setAnnotations(loadAnnotations());
     setMounted(true);
   }, []);
 
   if (!mounted) return null;
-
-  function exportNotes() {
-    const data = JSON.stringify(annotations, null, 2);
-    const blob = new Blob([data], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'ola-notes-backup.json';
-    a.click();
-    URL.revokeObjectURL(url);
-  }
-
-  function importNotes(e) {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      try {
-        const imported = JSON.parse(ev.target.result);
-        if (!Array.isArray(imported)) return;
-        const existing = loadAnnotations();
-        const existingIds = new Set(existing.map(a => a.id));
-        const merged = [...existing, ...imported.filter(a => a.id && !existingIds.has(a.id))];
-        saveAnnotations(merged);
-        setAnnotations(merged);
-      } catch { /* invalid JSON, ignore */ }
-    };
-    reader.readAsText(file);
-    e.target.value = '';
-  }
 
   function deleteAnnotation(id) {
     const updated = annotations.filter(a => a.id !== id);
@@ -106,31 +74,10 @@ export default function AllNotesView({ lectures }) {
     </div>
   );
 
-  const toolbar = (
-    <div className="notes-page__toolbar">
-      <button className="notes-page__toolbar-btn" onClick={exportNotes} disabled={annotations.length === 0}>
-        <span className="material-icons-round">file_download</span>
-        تصدير
-      </button>
-      <button className="notes-page__toolbar-btn" onClick={() => fileInputRef.current?.click()}>
-        <span className="material-icons-round">file_upload</span>
-        استيراد
-      </button>
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept=".json"
-        onChange={importNotes}
-        style={{ display: 'none' }}
-      />
-    </div>
-  );
-
   if (annotations.length === 0) {
     return (
       <div className="notes-page__empty">
         {privacyBanner}
-        {toolbar}
         <span className="material-icons-round">lightbulb</span>
         <h2>لا توجد ملاحظات بعد</h2>
         <p>افتح أي مجلس وحدد نصًا لإضافة ملاحظة مرتبطة، أو اكتب ملاحظة عامة</p>
@@ -145,7 +92,6 @@ export default function AllNotesView({ lectures }) {
   return (
     <div className="notes-page__content">
       {privacyBanner}
-      {toolbar}
       <div className="notes-page__stats">
         <div className="notes-page__stat">
           <span className="material-icons-round">article</span>
