@@ -1,10 +1,11 @@
-const CACHE_NAME = 'ola-v1';
+const CACHE_NAME = 'ola-v3';
 
 // Core shell to pre-cache on install
 const PRECACHE = [
   '/',
   '/manifest.json',
   '/favicon.svg',
+  '/fonts/material-symbols-rounded.woff2',
 ];
 
 // Install: cache core shell
@@ -25,7 +26,7 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Fetch: network-first for pages, cache-first for static assets
+// Fetch: network-first for pages, cache-first for static assets & fonts
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);

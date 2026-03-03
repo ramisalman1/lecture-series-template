@@ -60,7 +60,7 @@ export default function Header({ lectures }) {
             <svg className="header__logo" width="28" height="28" viewBox="0 0 32 32" aria-hidden="true">
               <rect width="32" height="32" rx="6" className="header__logo-bg" />
               {/* ── عدّل الشعار واسم السلسلة ── */}
-              <text x="16" y="23" textAnchor="middle" fontFamily="serif" fontSize="20" fontWeight="700" className="header__logo-text">أب</text>
+              <text x="16" y="23" textAnchor="middle" fontFamily="serif" fontSize="20" fontWeight="700" direction="rtl" className="header__logo-text">أب</text>
             </svg>
             اسم السلسلة
           </Link>
