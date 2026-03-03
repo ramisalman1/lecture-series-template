@@ -2,7 +2,8 @@ import { LECTURES, ORDINAL_NAMES } from '../../lib/constants';
 import AllNotesView from '../../components/AllNotesView';
 
 export const metadata = {
-  title: 'ملاحظاتي — ألف باء الزواج',
+  // ── عدّل اسم السلسلة ──
+  title: 'ملاحظاتي — اسم السلسلة',
 };
 
 export default function NotesPage() {

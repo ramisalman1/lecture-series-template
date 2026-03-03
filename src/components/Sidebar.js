@@ -30,46 +30,7 @@ export default function Sidebar({ lectures, isOpen, onClose }) {
           <span className="material-icons-round">task_alt</span>
           <span>التكليفات</span>
         </Link>
-        <Link
-          href="/qa"
-          className={`sidebar__nav-link${pathname === '/qa' ? ' active' : ''}`}
-          onClick={onClose}
-        >
-          <span className="material-icons-round">help_center</span>
-          <span>أسئلة وأجوبة</span>
-        </Link>
-        <Link
-          href="/profile-card"
-          className={`sidebar__nav-link${pathname === '/profile-card' ? ' active' : ''}`}
-          onClick={onClose}
-        >
-          <span className="material-icons-round">badge</span>
-          <span>بطاقة التعارف</span>
-        </Link>
-        <Link
-          href="/questions"
-          className={`sidebar__nav-link${pathname === '/questions' ? ' active' : ''}`}
-          onClick={onClose}
-        >
-          <span className="material-icons-round">quiz</span>
-          <span>أسئلة الخِطبة</span>
-        </Link>
-        <Link
-          href="/needs-female"
-          className={`sidebar__nav-link${pathname === '/needs-female' ? ' active' : ''}`}
-          onClick={onClose}
-        >
-          <span className="material-icons-round">female</span>
-          <span>حاجات الأنثى</span>
-        </Link>
-        <Link
-          href="/needs-male"
-          className={`sidebar__nav-link${pathname === '/needs-male' ? ' active' : ''}`}
-          onClick={onClose}
-        >
-          <span className="material-icons-round">male</span>
-          <span>حاجات الرجل</span>
-        </Link>
+        {/* ── أضف روابط صفحات إضافية هنا إن أردت ── */}
         <Link
           href="/resources"
           className={`sidebar__nav-link${pathname === '/resources' ? ' active' : ''}`}

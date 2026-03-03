@@ -3,13 +3,12 @@
 import { useState, useEffect, useRef } from 'react';
 import { trackEvent } from '../../lib/analytics';
 
+// ── مفاتيح البيانات المحلية ──
+// أضف أو احذف مفاتيح حسب أدوات سلسلتك
 const DATA_KEYS = [
   { key: 'lecture-annotations', label: 'الملاحظات والتعليقات', icon: 'sticky_note_2', unit: 'ملاحظة', countFn: v => { try { return JSON.parse(v)?.length || 0; } catch { return 0; } } },
   { key: 'lecture-progress', label: 'تقدّم المجالس', icon: 'menu_book', unit: 'مجلس', countFn: v => { try { return Object.keys(JSON.parse(v) || {}).length; } catch { return 0; } } },
   { key: 'assignments-progress', label: 'التكليفات', icon: 'task_alt', unit: 'تكليف', countFn: v => { try { return Object.values(JSON.parse(v) || {}).filter(Boolean).length; } catch { return 0; } } },
-  { key: 'questions-answers', label: 'أسئلة الخِطبة', icon: 'quiz', unit: 'إجابة', countFn: v => { try { return Object.keys(JSON.parse(v) || {}).length; } catch { return 0; } } },
-  { key: 'profile-card-data', label: 'بطاقة التعارف', icon: 'badge', unit: 'حقل', countFn: v => { try { return Object.keys(JSON.parse(v) || {}).length; } catch { return 0; } } },
-  { key: 'redflags-checked', label: 'العلامات الحمراء', icon: 'flag', unit: 'علامة', countFn: v => { try { return Object.values(JSON.parse(v) || {}).filter(Boolean).length; } catch { return 0; } } },
   { key: 'lecture-notes', label: 'ملاحظات (قديم)', icon: 'note', unit: 'ملاحظة', countFn: v => { try { return Object.keys(JSON.parse(v) || {}).length; } catch { return 0; } } },
 ];
 
@@ -52,7 +51,8 @@ export default function SettingsPage() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `ألف-باء-الزواج-بياناتي-${new Date().toISOString().slice(0, 10)}.json`;
+    // ── عدّل اسم ملف التصدير ──
+    a.download = `بياناتي-${new Date().toISOString().slice(0, 10)}.json`;
     a.click();
     URL.revokeObjectURL(url);
     trackEvent('data_export');
@@ -212,7 +212,7 @@ export default function SettingsPage() {
             حذف جميع البيانات
           </h2>
           <p className="settings-page__section-desc">
-            سيتم حذف جميع بياناتك نهائيًا (الملاحظات، التقدم، الإجابات، بطاقة التعارف). لن يتم حذف إعداداتك (المظهر، حجم الخط). هذا الإجراء لا يمكن التراجع عنه.
+            سيتم حذف جميع بياناتك نهائيًا (الملاحظات، التقدم، التكليفات). لن يتم حذف إعداداتك (المظهر، حجم الخط). هذا الإجراء لا يمكن التراجع عنه.
           </p>
 
           {!showDeleteConfirm ? (

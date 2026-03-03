@@ -6,15 +6,18 @@ import TableOfContents from '../../../components/TableOfContents';
 import LectureToolbar from '../../../components/LectureToolbar';
 import AnnotatedContent from '../../../components/AnnotatedContent';
 
-export function generateStaticParams() {
-  return getAllSlugs().map((slug) => ({ slug }));
+export const dynamicParams = false;
+
+export async function generateStaticParams() {
+  const slugs = getAllSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export function generateMetadata({ params }) {
   const lecture = getLecture(params.slug);
   if (!lecture) return {};
   return {
-    title: `المجلس ${lecture.ordinal} — ألف باء الزواج`,
+    title: `المجلس ${lecture.ordinal} — اسم السلسلة`,
   };
 }
 
@@ -35,7 +38,7 @@ export default function LecturePage({ params }) {
 
       <LectureNav prev={lecture.prev} next={lecture.next} />
 
-      <LectureToolbar slug={lecture.slug} title={`المجلس ${lecture.ordinal} — ألف باء الزواج`} />
+      <LectureToolbar slug={lecture.slug} title={`المجلس ${lecture.ordinal} — اسم السلسلة`} />
     </main>
   );
 }

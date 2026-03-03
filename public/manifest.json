@@ -1,7 +1,7 @@
 {
-  "name": "ألف باء الزواج",
-  "short_name": "ألف باء",
-  "description": "سلسلة مجالس معرفية مع عبد الرحمن ذاكر الهاشمي",
+  "name": "اسم السلسلة",
+  "short_name": "السلسلة",
+  "description": "وصف السلسلة",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

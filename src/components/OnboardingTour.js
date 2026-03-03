@@ -51,7 +51,7 @@ function runHomeTour() {
         },
         popover: {
           title: 'قائمة المجالس',
-          description: '٥٣ مجلسًا مرتّبًا بعناية. كل مجلس يظهر حالته — مقروء أو في المفضّلة.',
+          description: 'المجالس مرتّبة بعناية. كل مجلس يظهر حالته — مقروء أو في المفضّلة.',
         },
       },
       {
@@ -66,34 +66,6 @@ function runHomeTour() {
         popover: {
           title: 'التكليفات',
           description: 'مهامّ عملية مطلوبة منك بعد كل مجلس لتطبيق ما تعلّمته.',
-        },
-      },
-      {
-        element: '.sidebar__nav-link[href="/qa"]',
-        popover: {
-          title: 'أسئلة وأجوبة',
-          description: 'فهرس لأهم الأسئلة المطروحة في المجالس مع إجاباتها.',
-        },
-      },
-      {
-        element: '.sidebar__nav-link[href="/profile-card"]',
-        popover: {
-          title: 'بطاقة التعارف',
-          description: 'أنشئ بطاقة تعريفية شخصية تلخّص معلوماتك الأساسية.',
-        },
-      },
-      {
-        element: '.sidebar__nav-link[href="/questions"]',
-        popover: {
-          title: 'أسئلة الخِطبة',
-          description: 'أسئلة مُعدّة للتعارف خلال مرحلة الخِطبة.',
-        },
-      },
-      {
-        element: '.sidebar__nav-link[href="/needs-female"]',
-        popover: {
-          title: 'حاجات الذكر والأنثى',
-          description: 'تجميع لأهم حاجات الطرفين من واقع مشاركات جمهور المجالس.',
         },
       },
       {
@@ -126,7 +98,7 @@ function runHomeTour() {
         },
         popover: {
           title: 'شريط التقدّم',
-          description: 'يوضّح كم مجلسًا أتممت من أصل ٥٣.',
+          description: 'يوضّح كم مجلسًا أتممت من السلسلة.',
         },
       },
     ],
@@ -215,7 +187,7 @@ async function runLectureTour() {
   ref.d.drive();
 }
 
-/* ── Welcome Modal (custom) ── */
+/* ── Welcome Modal ── */
 function WelcomeModal({ onStart, onSkip }) {
   const [visible, setVisible] = useState(false);
 
@@ -226,24 +198,24 @@ function WelcomeModal({ onStart, onSkip }) {
   return (
     <div className={`welcome-overlay${visible ? ' welcome-overlay--visible' : ''}`}>
       <div className={`welcome-card${visible ? ' welcome-card--visible' : ''}`}>
-        <div className="welcome-card__badge">ألف باء</div>
-        <h1 className="welcome-card__title">أهلًا بك في ألف باء الزواج</h1>
+        {/* ── عدّل نص الترحيب ليناسب سلسلتك ── */}
+        <div className="welcome-card__badge">مرحبًا</div>
+        <h1 className="welcome-card__title">أهلًا بك في السلسلة</h1>
         <p className="welcome-card__desc">
-          سلسلة من <strong>٥٣ مجلسًا معرفيًا</strong> تتناول أسس الزواج ومقدّماته
-          — من فهم النفس والآخر، إلى الخِطبة والحياة الزوجية.
+          أضف وصفًا مختصرًا للسلسلة هنا.
         </p>
         <div className="welcome-card__features">
           <div className="welcome-card__feature">
             <span className="material-icons-round">menu_book</span>
-            <span>٥٣ مجلسًا مرتّبًا</span>
+            <span>المجالس</span>
           </div>
           <div className="welcome-card__feature">
             <span className="material-icons-round">edit_note</span>
             <span>ملاحظات شخصية</span>
           </div>
           <div className="welcome-card__feature">
-            <span className="material-icons-round">quiz</span>
-            <span>أدوات تفاعلية</span>
+            <span className="material-icons-round">task_alt</span>
+            <span>تكليفات عملية</span>
           </div>
         </div>
         <div className="welcome-card__actions">

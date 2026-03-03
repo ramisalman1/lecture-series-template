@@ -1,8 +1,9 @@
 import AssignmentsTracker from '../../components/AssignmentsTracker';
 
 export const metadata = {
-  title: 'التكليفات — ألف باء الزواج',
-  description: 'تكليفات عملية وكتابية من سلسلة ألف باء الزواج — تابع التزامك بها',
+  // ── عدّل اسم السلسلة ──
+  title: 'التكليفات — اسم السلسلة',
+  description: 'تكليفات عملية وكتابية من السلسلة — تابع التزامك بها',
 };
 
 export default function AssignmentsPage() {

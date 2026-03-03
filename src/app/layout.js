@@ -10,9 +10,10 @@ import InstallBanner from '../components/InstallBanner';
 import { ProgressProvider } from '../components/ProgressProvider';
 import { getAllLectures } from '../lib/lectures';
 
+// ── عدّل البيانات الوصفية لسلسلتك ──
 export const metadata = {
-  title: 'ألف باء الزواج',
-  description: 'سلسلة مجالس معرفية مع عبد الرحمن ذاكر الهاشمي',
+  title: 'اسم السلسلة',
+  description: 'وصف السلسلة',
   icons: {
     icon: '/favicon.svg',
     apple: '/icons/icon-192.png',
@@ -21,7 +22,7 @@ export const metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: 'ألف باء الزواج',
+    title: 'اسم السلسلة',
   },
   other: {
     'mobile-web-app-capable': 'yes',
@@ -38,8 +39,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="ar" dir="rtl">
       <head>
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-NDHE99PQRH"
+        {/* ── Google Analytics — استبدل المعرّف بمعرّفك الخاص ── */}
+        {/* <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"
           strategy="afterInteractive"
         />
         <Script id="google-analytics" strategy="afterInteractive">
@@ -50,9 +52,9 @@ export default function RootLayout({ children }) {
             gtag('consent', 'default', {
               analytics_storage: 'granted'
             });
-            gtag('config', 'G-NDHE99PQRH');
+            gtag('config', 'G-XXXXXXXXXX');
           `}
-        </Script>
+        </Script> */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
@@ -74,7 +76,8 @@ export default function RootLayout({ children }) {
           </div>
 
           <footer className="footer">
-            <span>ألف باء الزواج</span>
+            {/* ── عدّل اسم السلسلة في الفوتر ── */}
+            <span>اسم السلسلة</span>
             <Link href="/updates" className="footer__updates-link">
               <span className="material-icons-round">update</span>
               سجل التحديثات

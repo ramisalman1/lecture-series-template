@@ -80,7 +80,8 @@ export default function LectureToolbar({ slug, title }) {
       h1.style.cssText = 'font-size:20px;color:#1565C0;margin:0 0 4px;';
       header.appendChild(h1);
       const subtitle = document.createElement('p');
-      subtitle.textContent = 'ألف باء الزواج';
+      // ── عدّل اسم السلسلة في تصدير PDF ──
+      subtitle.textContent = 'اسم السلسلة';
       subtitle.style.cssText = 'font-size:13px;color:#666;margin:0;';
       header.appendChild(subtitle);
       container.appendChild(header);

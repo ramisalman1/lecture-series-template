@@ -59,9 +59,10 @@ export default function Header({ lectures }) {
           <Link href="/">
             <svg className="header__logo" width="28" height="28" viewBox="0 0 32 32" aria-hidden="true">
               <rect width="32" height="32" rx="6" className="header__logo-bg" />
+              {/* ── عدّل الشعار واسم السلسلة ── */}
               <text x="16" y="23" textAnchor="middle" fontFamily="serif" fontSize="20" fontWeight="700" className="header__logo-text">أب</text>
             </svg>
-            ألف باء الزواج
+            اسم السلسلة
           </Link>
         </div>
         <span className="header__subtitle">{subtitle}</span>
